@@ -17,22 +17,6 @@ module counter #(size = 8) (clk, rst, ld, ld_val, en, up, val);
     end
 endmodule
 
-module shiftreg #(size = 8) (clk, rst, ld, ld_val, en, right, val);
-    input clk, rst, ld, en, right;
-    input [size-1:0] ld_val;
-    output reg [size-1:0] val;
-    
-    always @(posedge clk, posedge rst) begin
-        if (rst) begin
-            val <= 0;
-        end else if (ld) begin
-            val <= ld_val;
-        end else if (en) begin
-            val <= (right) ? {1'b0, val[size-1:1]} : {val[size-2:0], 1'b0};
-        end
-    end
-endmodule
-
 module barrelshift #(size = 8) (barrel_in, barrel, right, barrel_out);
     input      signed [size-1:0] barrel_in;
     input                  [3:0] barrel;
