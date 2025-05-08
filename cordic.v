@@ -24,9 +24,8 @@ module barrelshift #(size = 8) (barrel_in, barrel, right, barrel_out);
     output reg signed [size-1:0] barrel_out;
     
     always @(barrel_in, barrel, right) begin
-        if (barrel == 0) begin
-            barrel_out = barrel_in;
-        end else if (barrel == 1) begin
+        barrel_out = barrel_in;
+        if (barrel == 1) begin
             barrel_out = (right) ? barrel_in >>> 1 : barrel_in <<< 1;
         end else if (barrel == 2) begin
             barrel_out = (right) ? barrel_in >>> 2 : barrel_in <<< 2;
