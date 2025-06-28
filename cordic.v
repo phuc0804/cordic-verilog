@@ -144,9 +144,9 @@ module cordic (clk, rst, s, angle, done, sine, cosine);
         reg_ld_angle = 0; reg_ld_sine = 0; reg_ld_cosine = 0; cntr_ld0 = 0; cntr_en0 = 0; done = 0;
         case (y)
             0: begin
-                reg_ld_angle = 1;
+                reg_ld_angle = 1; cntr_ld0 = 1;
                 if (s) begin
-                    reg_ld_sine = 1; reg_ld_cosine = 1; cntr_ld0 = 1;
+                    reg_ld_sine = 1; reg_ld_cosine = 1;
                 end
             end
             1: begin
@@ -158,12 +158,12 @@ module cordic (clk, rst, s, angle, done, sine, cosine);
         endcase
     end
     
-    assign reg_ld_val_angle = (y == 0) ? angle : (y == 1) ? (reg_val_angle >= 000_000_000) ? 
-        reg_val_angle - atan[cntr_val0] : reg_val_angle + atan[cntr_val0] : 0;
-    assign reg_ld_val_cosine = (y == 0) ? 006_073_000 : (y == 1) ? (reg_val_angle >= 000_000_000) ?
-        reg_val_cosine - bshft_val_sine : reg_val_cosine + bshft_val_sine : 0;
-    assign reg_ld_val_sine = (y == 0) ? 000_000_000 : (y == 1) ? (reg_val_angle >= 000_000_000) ?
-        reg_val_sine + bshft_val_cosine : reg_val_sine - bshft_val_cosine : 0;
+    assign reg_ld_val_angle = (y == 0) ? angle : (reg_val_angle >= 000_000_000) ? 
+        reg_val_angle - atan[cntr_val0] : reg_val_angle + atan[cntr_val0];
+    assign reg_ld_val_cosine = (y == 0) ? 006_073_000 : (reg_val_angle >= 000_000_000) ?
+        reg_val_cosine - bshft_val_sine : reg_val_cosine + bshft_val_sine;
+    assign reg_ld_val_sine = (y == 0) ? 000_000_000 : (reg_val_angle >= 000_000_000) ?
+        reg_val_sine + bshft_val_cosine : reg_val_sine - bshft_val_cosine;
     
     assign z = (cntr_val0 == 15);
     
